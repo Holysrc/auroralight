@@ -2,7 +2,7 @@
 
 **Per-game chassis lighting for the Alienware Aurora, without Alienware Command Center.**
 
-AuroraLight gives every game and program its own color and effect. It sits in the tray, uses about 30 MB of memory, and needs no drivers, extra packages or administrator rights.
+AuroraLight gives every game and program its own color and effect. It sits in the tray, uses about 30 MB of memory, and needs no drivers, Python or administrator rights.
 
 ## Features
 
@@ -27,19 +27,34 @@ python aw_elc.py status
 
 ## Getting started
 
+1. Download [AuroraLight-windows-x64.zip](https://github.com/Holysrc/auroralight/releases/latest/download/AuroraLight-windows-x64.zip) and unpack it anywhere. You don't need Python.
+2. Close or uninstall Alienware Command Center, because it overrides the colors while it runs.
+3. Run `AuroraLight.exe`.
+4. To start it with Windows, put a shortcut to it in the `shell:startup` folder.
+
+The exe is not code-signed, so Windows SmartScreen may warn you the first time. Choose **More info**, then **Run anyway**, or build it yourself from the source.
+
+### Running from source
+
 You need [Python](https://www.python.org/downloads/) 3.10 or newer with Tkinter, which the standard Windows installer includes.
 
-1. Download the [latest release](https://github.com/Holysrc/auroralight/releases/latest) and unpack it.
-2. Optional: to keep your Command Center colors, run this while it is still installed:
-   ```bash
-   python import_awcc.py
-   ```
-3. Close or uninstall Alienware Command Center, because it overrides the colors while it runs.
-4. Start AuroraLight:
-   ```bash
-   pythonw fx_watch.pyw
-   ```
-5. To start it with Windows, put a shortcut to that command in the `shell:startup` folder.
+```bash
+pythonw fx_watch.pyw
+```
+
+To build the exe yourself:
+
+```bash
+powershell -ExecutionPolicy Bypass -File build.ps1
+```
+
+### Keeping your Command Center colors
+
+This one-time import needs the source and Python, and must run while Command Center is still installed. It writes next to the scripts, so copy the resulting `auroralight.json` to `%LOCALAPPDATA%\AuroraLight` if you use the exe.
+
+```bash
+python import_awcc.py
+```
 
 ## Using it
 
@@ -55,7 +70,7 @@ Click the tray icon to open the settings window. Double-click a row to change it
 
 Xbox and other store games are not found automatically, so add them with **From running…** or **Choose exe…**.
 
-Settings are stored in `auroralight.json` and the log in `auroralight.log`, both next to the scripts.
+Settings are stored in `auroralight.json` and the log in `auroralight.log`. The exe keeps both in `%LOCALAPPDATA%\AuroraLight`; when run from source they sit next to the scripts.
 
 ## Limitations
 
@@ -69,11 +84,12 @@ Settings are stored in `auroralight.json` and the log in `auroralight.log`, both
 | File | Purpose |
 |---|---|
 | `fx_watch.pyw` | Background program: watches the active window and sets the lighting |
-| `fx_ui.pyw` | Settings window |
+| `fx_ui.py` | Settings window |
 | `fx_tray.py` | Tray icon |
 | `fx_games.py` | Finds installed games |
 | `aw_elc.py` | Talks to the controller through `hid.dll` and holds shared code; also a small command line tool |
 | `import_awcc.py` | One-time import from Command Center |
+| `build.ps1` | Builds `AuroraLight.exe` with PyInstaller |
 
 ## Credits
 

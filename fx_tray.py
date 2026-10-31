@@ -107,8 +107,11 @@ def dot_icon(color: str) -> W.HICON:
 
 
 def open_settings() -> None:
+    if getattr(sys, "frozen", False):
+        subprocess.Popen([sys.executable, "--settings"], cwd=aw_elc.HERE)
+        return
     pyw = os.path.join(os.path.dirname(sys.executable), "pythonw.exe")
-    subprocess.Popen([pyw, os.path.join(aw_elc.HERE, "fx_ui.pyw")], cwd=aw_elc.HERE)
+    subprocess.Popen([pyw, os.path.join(aw_elc.HERE, "fx_ui.py")], cwd=aw_elc.HERE)
 
 
 class Tray:

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MPL-2.0
 """Settings window for the chassis lighting: default look, brightness, a look per program. Starts the watcher if needed.
 
-    pythonw fx_ui.pyw
+    pythonw fx_ui.py
 
 Every change is saved to auroralight.json straight away and the watcher picks it up within a second.
 """
@@ -39,7 +39,9 @@ def start_watcher() -> None:
     mutex = aw_elc.kernel32.CreateMutexW(None, False, aw_elc.MUTEX)
     exists = C.get_last_error() == 183
     aw_elc.kernel32.CloseHandle(mutex)
-    if not exists:
+    if not exists and getattr(sys, "frozen", False):
+        subprocess.Popen([sys.executable], cwd=aw_elc.HERE, creationflags=subprocess.DETACHED_PROCESS)
+    elif not exists:
         pyw = os.path.join(os.path.dirname(sys.executable), "pythonw.exe")
         subprocess.Popen([pyw, os.path.join(aw_elc.HERE, "fx_watch.pyw")], cwd=aw_elc.HERE,
                          creationflags=subprocess.DETACHED_PROCESS)

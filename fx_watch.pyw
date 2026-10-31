@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MPL-2.0
 """Background watcher: keeps the chassis lighting on the look of the program in use. Lives in the tray (fx_tray.py);
-settings are in fx_ui.pyw. Part of AuroraLight.
+settings are in fx_ui.py. Part of AuroraLight.
 
     pythonw fx_watch.pyw
 
@@ -150,6 +150,10 @@ class Watcher:
 
 
 def main() -> int:
+    if "--settings" in sys.argv:                  # the built exe has both parts, this one opens the window
+        import fx_ui
+        fx_ui.main()
+        return 0
     handler = logging.handlers.RotatingFileHandler(os.path.join(aw_elc.HERE, "auroralight.log"),
                                                    maxBytes=500_000, backupCount=1, encoding="utf-8")
     handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s", "%Y-%m-%d %H:%M:%S"))

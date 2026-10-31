@@ -6,3 +6,8 @@ auroralight.json
 auroralight.json.tmp
 auroralight.status.json
 auroralight.status.json.tmp
+# built exe and the tools to build it
+app/
+build/
+.venv-build/
+*.spec

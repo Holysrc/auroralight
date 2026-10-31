@@ -19,7 +19,10 @@ import re
 import sys
 import time
 
-HERE = os.path.dirname(os.path.abspath(__file__))
+# settings and the log: next to the scripts, or for the built exe in the user's own data folder
+HERE = (os.path.join(os.environ["LOCALAPPDATA"], "AuroraLight") if getattr(sys, "frozen", False)
+        else os.path.dirname(os.path.abspath(__file__)))
+os.makedirs(HERE, exist_ok=True)
 CONFIG = os.path.join(HERE, "auroralight.json")
 STATUS = os.path.join(HERE, "auroralight.status.json")
 MUTEX = "Local\\auroralight-watcher"
