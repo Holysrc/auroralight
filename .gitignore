@@ -1,0 +1,8 @@
+__pycache__/
+*.log
+*.log.*
+# personal: the game list and the current state of this PC
+fx-lights.json
+fx-lights.json.tmp
+fx-lights.status.json
+fx-lights.status.json.tmp
