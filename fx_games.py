@@ -1,7 +1,8 @@
+# SPDX-License-Identifier: MPL-2.0
 """Installed games from the launchers' own records (Steam, Epic, GOG) and adding the new ones to the config.
 
 A game is tracked by its folder, so any exe inside it counts. One the user removed from the list goes to `ignored` and
-does not come back on its own; the "Найти игры" button restores those too.
+does not come back on its own; the "Find games" button restores those too.
 """
 from __future__ import annotations
 

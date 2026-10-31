@@ -1,14 +1,15 @@
+# SPDX-License-Identifier: MPL-2.0
 """Background watcher: keeps the chassis lighting on the look of the program in use. Lives in the tray (fx_tray.py);
-settings are in fx_ui.pyw.
+settings are in fx_ui.pyw. Part of AuroraLight.
 
     pythonw fx_watch.pyw
 
 Once a second it asks which program owns the active window. A program with a rule gets its look, and keeps it after
 Alt-Tab to something without a rule, until it exits. Otherwise the default look shows. Only this process talks to the
-controller: the window just edits fx-lights.json, including a short "preview". After a long gap between ticks (a wake
+controller: the window just edits auroralight.json, including a short "preview". After a long gap between ticks (a wake
 from sleep) the look is sent again, twice, because the controller can lose it and USB can take a moment to come back.
 Every 5 minutes it adds newly installed games to the list (fx_games.py).
-Log: fx-lights.log next to this file.
+Log: auroralight.log next to this file.
 """
 from __future__ import annotations
 
@@ -78,7 +79,7 @@ class Watcher:
         cfg = self.cfg
         preview = cfg.get("preview")
         if preview and preview.get("until", 0) > time.time():
-            return "проверка цвета", look_of(preview)
+            return "preview", look_of(preview)
         pid, path = aw_elc.foreground()
         if path:
             for rule in cfg["rules"]:
@@ -91,7 +92,7 @@ class Watcher:
             if rule and aw_elc.is_alive(self.sticky["pid"]):
                 return rule["name"], look_of(rule)
             self.sticky = None
-        return "обычный", cfg["default"]
+        return "default", cfg["default"]
 
     def send(self, wanted: tuple) -> None:
         look, brightness = wanted
@@ -149,7 +150,7 @@ class Watcher:
 
 
 def main() -> int:
-    handler = logging.handlers.RotatingFileHandler(os.path.join(aw_elc.HERE, "fx-lights.log"),
+    handler = logging.handlers.RotatingFileHandler(os.path.join(aw_elc.HERE, "auroralight.log"),
                                                    maxBytes=500_000, backupCount=1, encoding="utf-8")
     handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s", "%Y-%m-%d %H:%M:%S"))
     log.addHandler(handler)
@@ -169,7 +170,7 @@ def main() -> int:
 
     threading.Thread(target=work, daemon=True).start()
     try:
-        tray.run()                                # until "Выход" in the tray menu; the colour stays on the chassis
+        tray.run()                                # until "Exit" in the tray menu; the colour stays on the chassis
     except Exception:  # noqa: BLE001
         log.exception("tray stopped")
         return 1

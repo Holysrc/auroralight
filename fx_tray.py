@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MPL-2.0
 """Tray icon of the watcher: a dot in the colour now showing. Click = settings window, right click = menu.
 
 Plain ctypes, runs the Windows message loop on the calling thread. Explorer restarts are handled: the icon comes back.
@@ -12,8 +13,8 @@ import sys
 
 import aw_elc
 
-TITLE = "Подсветка Alienware"
-CLASS_NAME = "FxLightsTray"
+TITLE = "AuroraLight"
+CLASS_NAME = "AuroraLightTray"
 SIZE = 32
 GREY = "#9A9A9A"
 WM_DESTROY, WM_COMMAND, WM_NULL = 0x0002, 0x0111, 0x0000
@@ -143,8 +144,8 @@ class Tray:
 
     def menu(self) -> None:
         menu = user32.CreatePopupMenu()
-        user32.AppendMenuW(menu, 0, MENU_SETTINGS, "Настройки…")
-        user32.AppendMenuW(menu, 0, MENU_EXIT, "Выход")
+        user32.AppendMenuW(menu, 0, MENU_SETTINGS, "Settings…")
+        user32.AppendMenuW(menu, 0, MENU_EXIT, "Exit")
         at = POINT()
         user32.GetCursorPos(C.byref(at))
         user32.SetForegroundWindow(self.hwnd)     # or the menu does not close on a click elsewhere
@@ -177,7 +178,7 @@ class Tray:
         return user32.DefWindowProcW(hwnd, msg, wparam, lparam)
 
     def run(self) -> None:
-        """Blocks until "Выход"."""
+        """Blocks until "Exit"."""
         module = kernel32.GetModuleHandleW(None)
         user32.RegisterClassW(C.byref(WNDCLASS(lpfnWndProc=self.proc, hInstance=module, lpszClassName=CLASS_NAME)))
         # not TITLE: the settings window finds itself by that title

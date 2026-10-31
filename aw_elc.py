@@ -1,4 +1,5 @@
-"""Alienware AW-ELC chassis lighting (USB 187C:0550) from Windows, plus what the watcher and the window share.
+# SPDX-License-Identifier: MPL-2.0
+"""AuroraLight: Alienware AW-ELC chassis lighting (USB 187C:0550) from Windows, plus what the other files share.
 
     python aw_elc.py status
     python aw_elc.py play static|breathe|pulse|morph|spectrum|wave [color] [color2] [brightness 0-100]
@@ -19,10 +20,10 @@ import sys
 import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CONFIG = os.path.join(HERE, "fx-lights.json")
-STATUS = os.path.join(HERE, "fx-lights.status.json")
-MUTEX = "Local\\fx-lights-watcher"
-WINDOW_MUTEX = "Local\\fx-lights-window"          # held while the settings window is open
+CONFIG = os.path.join(HERE, "auroralight.json")
+STATUS = os.path.join(HERE, "auroralight.status.json")
+MUTEX = "Local\\auroralight-watcher"
+WINDOW_MUTEX = "Local\\auroralight-window"          # held while the settings window is open
 DEFAULT_CONFIG = {"enabled": True, "default": {"effect": "static", "color": "#00F0F0"}, "brightness": 100,
                   "rules": [], "known_colors": {}}
 
@@ -32,10 +33,10 @@ LEDS = [*range(60), 63, 64, 65, 68]
 SLOT = 0xFFFF
 ANIM_NEW, ANIM_FINISH_PLAY = 1, 3
 COLOR, PULSE, MORPH = 0, 1, 2
-EFFECTS = {"static": "Цвет", "breathe": "Дыхание", "pulse": "Пульс", "morph": "Перелив двух цветов",
-           "spectrum": "Спектр", "wave": "Волна"}
-SPEEDS = {"slow": (3500, 100), "medium": (1800, 175), "fast": (800, 250)}
-SPECTRUM = [0xFF0000, 0xFF7A00, 0xFFFF00, 0x00D95F, 0x00BFFF, 0x245BFF, 0x8A2BE2]
+EFFECTS = {"static": "Solid color", "breathe": "Breathe", "pulse": "Pulse", "morph": "Morph between two colors",
+           "spectrum": "Spectrum", "wave": "Wave"}
+SPEEDS = {"slow": (3000, 90), "medium": (1500, 160), "fast": (700, 240)}
+SPECTRUM = [0xFF0040, 0xFF8000, 0xFFE000, 0x20E040, 0x00C8FF, 0x3050FF, 0xA030F0]
 
 hid = C.WinDLL("hid.dll")
 setupapi = C.WinDLL("setupapi.dll")

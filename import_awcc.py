@@ -1,4 +1,5 @@
-"""One-time import from Command Center into fx-lights.json: its per-game colours and its game list.
+# SPDX-License-Identifier: MPL-2.0
+"""One-time import from Command Center into auroralight.json: its per-game colours and its game list.
 
     python import_awcc.py
 
